@@ -19,6 +19,7 @@ public  class ExcluirGenerico extends JdbcDaoFactory {
 		setNomeTabela(nomeTabela);
 		setValorChave(valorChave);
 		setNomeChave(nomeChave);
+		setNomeDatabase("ctrlautres.db");
 	}
 	
 	public String getNomeChave() {

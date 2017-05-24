@@ -9,7 +9,7 @@ import java.util.List;
 public class Tabelas extends JdbcDaoFactory{
 
 	private List<String> tabelas = new ArrayList<>();
-	String[] banco = {"","","",""};
+	String[] bancoTabelas = {"ObjCtrl","Usuario","EquipamentoIOT","Acesso","Leitura","Agenda"};
 	
 	public Tabelas(String nomeDatabase){
 		setNomeDatabase(nomeDatabase);
