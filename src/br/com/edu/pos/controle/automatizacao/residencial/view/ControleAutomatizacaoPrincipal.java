@@ -12,7 +12,7 @@ public class ControleAutomatizacaoPrincipal {
 		System.out.println("Inicializando sistema...");
 		
 		//Teste
-		Tabelas Tabelas = new Tabelas("test.db");
+		Tabelas Tabelas = new Tabelas("ctrlautres.db");
 		List<String> l = Tabelas.getTabelas();
 		
 		for (String tabela : l) {
