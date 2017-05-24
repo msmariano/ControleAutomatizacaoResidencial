@@ -2,7 +2,7 @@ package br.com.edu.pos.controle.automatizacao.residencial.view;
 
 import java.util.List;
 
-import br.com.edu.pos.controle.automatizacao.residencial.sqlite.dao.Tabelas;
+import br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao.Tabelas;
 
 
 public class ControleAutomatizacaoPrincipal {

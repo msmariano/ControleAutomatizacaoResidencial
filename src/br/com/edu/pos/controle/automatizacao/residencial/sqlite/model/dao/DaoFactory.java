@@ -1,4 +1,4 @@
-package br.com.edu.pos.controle.automatizacao.residencial.sqlite.dao;
+package br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
