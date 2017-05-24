@@ -1,5 +1,8 @@
 package br.com.edu.pos.controle.automatizacao.residencial.view;
 
+import java.sql.SQLException;
+
+import br.com.edu.pos.controle.automatizacao.residencial.controller.ExcluirGenerico;
 import br.com.edu.pos.controle.automatizacao.residencial.controller.InicializarSistema;
 
 

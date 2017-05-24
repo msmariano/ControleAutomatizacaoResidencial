@@ -19,7 +19,7 @@ public class Tabelas extends JdbcDaoFactory{
 	void insereTabela(String nomeTabela){
 		
 	}
-	void gerar(){
+	public void gerar(){
 		
 	}
 	
@@ -37,7 +37,7 @@ public class Tabelas extends JdbcDaoFactory{
 	public void listarTabelas(){
 		try {
 				
-				getConnection();
+				getConnectionDataBase();
 				Statement stmt = connection.createStatement();
 				ResultSet rs = stmt.executeQuery( "SELECT name FROM sqlite_master WHERE type='table'" );
 				tabelas.clear();

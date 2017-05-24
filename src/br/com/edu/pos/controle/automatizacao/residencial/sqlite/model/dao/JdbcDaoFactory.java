@@ -27,12 +27,11 @@ public class JdbcDaoFactory extends DaoFactory {
 			connection.close();
 		}
 	}
-	@Override
-	Connection getConnection()  throws ClassNotFoundException, SQLException{
-		Class.forName("org.sqlite.JDBC");
-	    connection = DriverManager.getConnection("jdbc:sqlite:"+getNomeDatabase());
-	    connectado = true;
-		return connection;
+
+	public void getConnectionDataBase() throws ClassNotFoundException, SQLException {
+		if(getConnection(getNomeDatabase()) != null)
+			connectado = true;
 	}
+	
 
 }

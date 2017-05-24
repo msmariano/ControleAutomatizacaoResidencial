@@ -5,8 +5,9 @@ import br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao.Tabela
 public class InicializarSistema {
 	
 	public void executarInicializacao(){
-		Tabelas Tabelas = new Tabelas("ctrlautres.db");
-		
+		Tabelas tabelas = new Tabelas("ctrlautres.db");
+		System.out.println("Gerando tabelas...");
+		tabelas.gerar();
 	}
 	
 
