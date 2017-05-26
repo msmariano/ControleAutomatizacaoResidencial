@@ -48,5 +48,9 @@ public class AcessoDAO {
 	private Integer qtdeVezes;
 	private EquipamentoIotDAO equipamentoAcesso;
 	
+	public String toString(){
+		return "";
+		
+	}
 
 }

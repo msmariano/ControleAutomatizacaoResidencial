@@ -3,8 +3,9 @@ package br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
-public class JdbcDaoFactory extends DaoFactory {
+public abstract class JdbcDaoFactory extends DaoFactory {
 
 	
 	private String nomeDatabase;
@@ -31,6 +32,23 @@ public class JdbcDaoFactory extends DaoFactory {
 	public void getConnectionDataBase() throws ClassNotFoundException, SQLException {
 		if(getConnection(getNomeDatabase()) != null)
 			connectado = true;
+	}
+	
+
+	public void executa(String query) {
+		try {
+
+			getConnectionDataBase();
+			Statement stmt = connection.createStatement();
+			stmt.execute(query);
+			if(stmt != null)
+				stmt.close();
+			finalizarConnecao();
+
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 

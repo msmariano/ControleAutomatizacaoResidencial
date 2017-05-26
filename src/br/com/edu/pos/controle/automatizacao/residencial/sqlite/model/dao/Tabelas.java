@@ -16,21 +16,6 @@ public class Tabelas extends JdbcDaoFactory {
 		listarTabelas();
 	}
 
-	void executa(String query) {
-		try {
-
-			getConnectionDataBase();
-			Statement stmt = connection.createStatement();
-			stmt.execute(query);
-			if(stmt != null)
-				stmt.close();
-			finalizarConnecao();
-
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
-
-	}
 
 	public void gerar() {
 		for (String tabela : bancoTabelas) {

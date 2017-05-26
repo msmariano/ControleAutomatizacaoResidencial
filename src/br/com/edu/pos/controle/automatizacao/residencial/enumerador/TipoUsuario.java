@@ -44,5 +44,5 @@ public enum TipoUsuario {
 	public Boolean getMostrar() {
 		return mostrar;
 	}
-
+	
 }
