@@ -16,8 +16,14 @@ public class ControleAutomatizacaoPrincipal {
 		UsuarioDAO usuario = new UsuarioDAO();
 		usuario.setCpf("87522020972");
 		usuario.setNome("Marcelo dos Santos Mariano");
+		usuario.setEndereco("Rua Cyro Vellozo 56");
+		usuario.setTelefone("41985064115");
 		usuario.setEmail("marcelodossantosmariano@gmail.com");
-		usuario.salvar();
+		usuario.setId("20");
+		//usuario.deletar();
+		//usuario.salvar();
+		usuario.modificar();
+		
 		
 		
 		

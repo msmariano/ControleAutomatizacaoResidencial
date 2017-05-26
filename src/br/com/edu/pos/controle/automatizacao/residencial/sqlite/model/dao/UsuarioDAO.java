@@ -6,12 +6,25 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 	private String nome;
 	private String cpf;
 	private String endereco;
+	public String getId() {
+		return id;
+	}
+
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
 	private String email;
 	private String telefone;
+	private String id;
 	TipoUsuario tipoUsuario;
 	
 	public UsuarioDAO(){
 		inclusao.setObj(this);
+		exclusao.setObj(this);
+		alteracao.setObj(this);
 	}
 	
 	
@@ -25,7 +38,7 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 	@Override
 	public String toString() {
 		return "Usuario[nome=" + nome + ", cpf=" + cpf + ", endereco=" + endereco + ", email=" + email
-				+ ", telefone=" + telefone + ", tipoUsuario=" + tipoUsuario + "]";
+				+ ", telefone=" + telefone + ", tipoUsuario=" + tipoUsuario + ",id="+id+"]";
 	}
 	@Override
 	public int hashCode() {
@@ -107,6 +120,27 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 	public void salvar() {
 		// TODO Auto-generated method stub
 		inclusao.inserir();
+	}
+
+
+	@Override
+	public void deletar() {
+		// TODO Auto-generated method stub
+		exclusao.excluir();
+	}
+
+
+	@Override
+	public void consultar() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void modificar() {
+		// TODO Auto-generated method stub
+		alteracao.alterar();
 	}
 	
 
