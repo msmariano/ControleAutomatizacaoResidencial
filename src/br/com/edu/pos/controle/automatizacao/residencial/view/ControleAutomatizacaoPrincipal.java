@@ -1,7 +1,9 @@
 package br.com.edu.pos.controle.automatizacao.residencial.view;
 
-import br.com.edu.pos.controle.automatizacao.residencial.controller.IncluirGenerico;
+import java.util.List;
+
 import br.com.edu.pos.controle.automatizacao.residencial.controller.InicializarSistema;
+import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoUsuario;
 import br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao.UsuarioDAO;
 
 
@@ -14,15 +16,23 @@ public class ControleAutomatizacaoPrincipal {
 		iniciar.executarInicializacao();
 		
 		UsuarioDAO usuario = new UsuarioDAO();
-		usuario.setCpf("87522020972");
-		usuario.setNome("Marcelo dos Santos Mariano");
-		usuario.setEndereco("Rua Cyro Vellozo 56");
-		usuario.setTelefone("41985064115");
-		usuario.setEmail("marcelodossantosmariano@gmail.com");
-		usuario.setId("20");
+		//usuario.setCpf("");
+		//usuario.setNome("Marcelo dos Santos Mariano");
+		//usuario.setEndereco("");
+		//usuario.setTelefone("");
+		//usuario.setTipoUsuario(TipoUsuario.MORADOR);
+		//usuario.setEmail("");
+		//usuario.setId("");
 		//usuario.deletar();
 		//usuario.salvar();
-		usuario.modificar();
+		//usuario.modificar();
+		System.out.println(usuario.toString());
+		usuario.consultar();
+		
+		for (UsuarioDAO user : usuario.getListaUsuarios()) {
+			
+			System.out.println(user);
+		}
 		
 		
 		

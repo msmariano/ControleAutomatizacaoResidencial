@@ -1,32 +1,45 @@
 package br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoUsuario;
 
 public class UsuarioDAO extends SqlGenerico implements Sql {
 	private String nome;
 	private String cpf;
 	private String endereco;
-	public String getId() {
-		return id;
-	}
-
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-
 	private String email;
 	private String telefone;
 	private String id;
+	List<UsuarioDAO> listaUsuarios = new ArrayList<>();;
 	TipoUsuario tipoUsuario;
+	
+	public List<UsuarioDAO> getListaUsuarios() {
+		return listaUsuarios;
+	}
+
+	public void setListaUsuarios(List<UsuarioDAO> listaUsuarios) {
+		this.listaUsuarios = listaUsuarios;
+	}
+
+	
 	
 	public UsuarioDAO(){
 		inclusao.setObj(this);
 		exclusao.setObj(this);
 		alteracao.setObj(this);
-	}
+		consulta.setObj(this);
+	}	
 	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 	
 	public String getNome() {
 		return nome;
@@ -35,11 +48,57 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 		this.nome = nome;
 	}
 	
+	public TipoUsuario getTipoUsuario() {
+		return tipoUsuario;
+	}
+
+	public void setTipoUsuario(TipoUsuario tipoUsuario) {
+		this.tipoUsuario = tipoUsuario;
+	}
+	
+	public String getCpf() {
+		return cpf;
+	}
+	
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	
+	public String getEndereco() {
+		return endereco;
+	}
+	
+	public void setEndereco(String endereco) {
+		this.endereco = endereco;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public String getTelefone() {
+		return telefone;
+	}
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
+	
 	@Override
 	public String toString() {
+		
+		if (tipoUsuario == null){
+			return "Usuario[nome=" + nome + ", cpf=" + cpf + ", endereco=" + endereco + ", email=" + email
+					+ ", telefone=" + telefone + ", tipoUsuario=null,id="+id+"]";
+		}
+		
 		return "Usuario[nome=" + nome + ", cpf=" + cpf + ", endereco=" + endereco + ", email=" + email
-				+ ", telefone=" + telefone + ", tipoUsuario=" + tipoUsuario + ",id="+id+"]";
+				+ ", telefone=" + telefone + ", tipoUsuario=" + tipoUsuario.getValor() + ",id="+id+"]";
 	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,6 +111,7 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 		result = prime * result + ((tipoUsuario == null) ? 0 : tipoUsuario.hashCode());
 		return result;
 	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -90,56 +150,97 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 			return false;
 		return true;
 	}
-	public String getCpf() {
-		return cpf;
-	}
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-	public String getEndereco() {
-		return endereco;
-	}
-	public void setEndereco(String endereco) {
-		this.endereco = endereco;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getTelefone() {
-		return telefone;
-	}
-	public void setTelefone(String telefone) {
-		this.telefone = telefone;
-	}
-
-
+	
 	@Override
 	public void salvar() {
-		// TODO Auto-generated method stub
 		inclusao.inserir();
 	}
 
-
 	@Override
 	public void deletar() {
-		// TODO Auto-generated method stub
 		exclusao.excluir();
 	}
-
+	
 
 	@Override
 	public void consultar() {
-		// TODO Auto-generated method stub
+		
+		
+		consulta.consultar();
+		Collection<Object> res = consulta.getResultadoLinha();
+		if(res.size() == 1){
+			for (Object object : res) {
+				List<String> lista = (List<String>) object;
+				this.setNome(lista.get(0));
+				this.setCpf(lista.get(1));
+				this.setEndereco(lista.get(2));
+				this.setEmail(lista.get(3));
+				this.setTelefone(lista.get(4));
+				TipoUsuario tipoUsuario;
+				switch(Integer.parseInt(lista.get(5))){
+				case 1:
+					tipoUsuario = TipoUsuario.VISITANTE;
+					break;
+				case 2:
+					tipoUsuario = TipoUsuario.EQUIPAMENTOIOT;
+					break;
+				case 3:
+					tipoUsuario = TipoUsuario.ACESSO;
+					break;
+				case 4:	
+					tipoUsuario = TipoUsuario.MORADOR;
+					break;
+				default:
+					tipoUsuario = TipoUsuario.NENHUM;
+					break;
+				}
+				
+				this.setTipoUsuario(tipoUsuario);
+				this.setId(lista.get(6));
+			}
+		}
+		else{
+			
+			for (Object object : res) {
+				UsuarioDAO usuario = new UsuarioDAO();
+				List<String> lista = (List<String>) object;
+				usuario.setNome(lista.get(0));
+				usuario.setCpf(lista.get(1));
+				usuario.setEndereco(lista.get(2));
+				usuario.setEmail(lista.get(3));
+				usuario.setTelefone(lista.get(4));
+				TipoUsuario tipoUsuario;
+				switch(Integer.parseInt(lista.get(5))){
+				case 1:
+					tipoUsuario = TipoUsuario.VISITANTE;
+					break;
+				case 2:
+					tipoUsuario = TipoUsuario.EQUIPAMENTOIOT;
+					break;
+				case 3:
+					tipoUsuario = TipoUsuario.ACESSO;
+					break;
+				case 4:	
+					tipoUsuario = TipoUsuario.MORADOR;
+					break;
+				default:
+					tipoUsuario = TipoUsuario.NENHUM;
+					break;
+				}
+				
+				usuario.setTipoUsuario(tipoUsuario);
+				usuario.setId(lista.get(6));
+				listaUsuarios.add(usuario);
+			}
+			
+			
+		}
+		
 		
 	}
 
-
 	@Override
 	public void modificar() {
-		// TODO Auto-generated method stub
 		alteracao.alterar();
 	}
 	

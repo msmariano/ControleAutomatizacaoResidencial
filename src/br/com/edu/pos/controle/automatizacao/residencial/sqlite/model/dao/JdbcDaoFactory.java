@@ -2,16 +2,18 @@ package br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class JdbcDaoFactory extends DaoFactory {
 	
 	List<String> campo = new ArrayList<String>();
 	List<String> valor = new ArrayList<String>();
-	private Object obj;
+	private JdbcDaoFactory obj;
 	private String tabela = "";
 	private String valores="";
 	private String campos="";
@@ -54,7 +56,7 @@ public abstract class JdbcDaoFactory extends DaoFactory {
 		return obj;
 	}
 
-	public void setObj(Object obj) {
+	public void setObj(JdbcDaoFactory obj) {
 		this.obj = obj;
 	}
 
@@ -115,6 +117,36 @@ public abstract class JdbcDaoFactory extends DaoFactory {
 		}
 
 	}
+	
+	public Collection<Object> executaConsulta(String query,List<String>campos) {
+		
+		Collection<Object> resultadoPesquisa = new ArrayList<>();
+		
+		try {
+		System.out.println(query);
+			getConnectionDataBase();
+			Statement stmt = connection.createStatement();
+			ResultSet rs =  stmt.executeQuery(query);
+			
+			while(rs.next()){
+				List<String> resultado = new ArrayList<String>();
+				for(String s : campos){
+					resultado.add(rs.getString(s.trim()));
+				}
+				resultadoPesquisa.add(resultado);				
+			}
+			
+			if(stmt != null)
+				stmt.close();
+			finalizarConnecao();
+			return resultadoPesquisa;
+
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+		return resultadoPesquisa;
+	}
+	
 	public void ExtraiCamposValoresObj(){
 		setNomeDatabase("ctrlautres.db");
 		String ret = obj.toString();
