@@ -4,8 +4,23 @@ import java.util.Date;
 
 import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoAcesso;
 
-public class AcessoDAO {
+public class AcessoDAO  extends SqlGenerico implements Sql {
 	private Date inicioAcesso;
+	private Date fimAcesso;
+	private TipoAcesso tipoAcesso;
+	private Boolean repetido;
+	private Integer qtdeVezes;
+	private EquipamentoIotDAO equipamentoAcesso;
+	private Integer id;
+	
+	public AcessoDAO(){
+		inclusao.setObj(this);
+		exclusao.setObj(this);
+		alteracao.setObj(this);
+		consulta.setObj(this);
+	}
+	
+	
 	public Date getInicioAcesso() {
 		return inicioAcesso;
 	}
@@ -19,10 +34,10 @@ public class AcessoDAO {
 		this.fimAcesso = fimAcesso;
 	}
 	public TipoAcesso getTipAcesso() {
-		return tipAcesso;
+		return tipoAcesso;
 	}
 	public void setTipAcesso(TipoAcesso tipAcesso) {
-		this.tipAcesso = tipAcesso;
+		this.tipoAcesso = tipAcesso;
 	}
 	public Boolean getRepetido() {
 		return repetido;
@@ -42,14 +57,47 @@ public class AcessoDAO {
 	public void setEquipamentoAcesso(EquipamentoIotDAO equipamentoAcesso) {
 		this.equipamentoAcesso = equipamentoAcesso;
 	}
-	private Date fimAcesso;
-	private TipoAcesso tipAcesso;
-	private Boolean repetido;
-	private Integer qtdeVezes;
-	private EquipamentoIotDAO equipamentoAcesso;
 	
-	public String toString(){
-		return "";
+	
+	@Override
+	public String toString() {
+		
+		if(tipoAcesso == null){
+			return "Acesso [inicioAcesso=" + inicioAcesso + ", fimAcesso=" + fimAcesso + ", tipoAcesso=null"
+					+ ", repetido=" + repetido + ", qtdeVezes=" + qtdeVezes + ", equipamentoAcesso=" + equipamentoAcesso
+					+  ",id="+id+ "]";
+		}
+		
+		return "Acesso [inicioAcesso=" + inicioAcesso + ", fimAcesso=" + fimAcesso + ", tipoAcesso=" + tipoAcesso
+				+ ", repetido=" + repetido + ", qtdeVezes=" + qtdeVezes + ", equipamentoAcesso=" + equipamentoAcesso
+				+  ",id="+id+ "]";
+	}
+
+
+	@Override
+	public void salvar() {
+		inclusao.inserir();
+		
+	}
+
+
+	@Override
+	public void deletar() {
+		exclusao.excluir();
+		
+	}
+
+
+	@Override
+	public void consultar() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void modificar() {
+		alteracao.alterar();
 		
 	}
 

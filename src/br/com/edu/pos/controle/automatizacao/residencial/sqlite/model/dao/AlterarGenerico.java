@@ -1,6 +1,4 @@
-package br.com.edu.pos.controle.automatizacao.residencial.controller;
-
-import br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao.JdbcDaoFactory;
+package br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao;
 
 public class AlterarGenerico extends JdbcDaoFactory {
 	
