@@ -13,7 +13,7 @@ public class UsuarioDTO {
 	private String email;
 	private String telefone;
 	private String id;
-	List<UsuarioDAO> listaUsuarios = new ArrayList<>();;
+	List<UsuarioDAO> listaUsuarios = new ArrayList<>();
 	TipoUsuario tipoUsuario;
 	public String getNome() {
 		return nome;
