@@ -11,6 +11,7 @@ public class AcessoDAO  extends SqlGenerico implements Sql {
 	private Boolean repetido;
 	private Integer qtdeVezes;
 	private EquipamentoIotDAO equipamentoAcesso;
+	private UsuarioDAO usuarioAcesso;
 	private Integer id;
 	
 	public AcessoDAO(){
@@ -99,6 +100,16 @@ public class AcessoDAO  extends SqlGenerico implements Sql {
 	public void modificar() {
 		alteracao.alterar();
 		
+	}
+
+
+	public UsuarioDAO getUsuarioAcesso() {
+		return usuarioAcesso;
+	}
+
+
+	public void setUsuarioAcesso(UsuarioDAO usuarioAcesso) {
+		this.usuarioAcesso = usuarioAcesso;
 	}
 
 }

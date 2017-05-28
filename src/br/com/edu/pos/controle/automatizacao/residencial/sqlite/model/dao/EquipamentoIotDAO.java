@@ -41,7 +41,7 @@ public class EquipamentoIotDAO extends SqlGenerico implements Sql {
 		}
 
 		return "EquipamentoIot [nome=" + nome + ", descricao=" + descricao + ", ip=" + ip + ", codigo=" + codigo
-				+ ", id=" + id + ", tipoEquipamento=" + tipoEquipamento + "]";
+				+ ", id=" + id + ", tipoEquipamento=" + tipoEquipamento.getValor() + "]";
 	}
 
 	@Override

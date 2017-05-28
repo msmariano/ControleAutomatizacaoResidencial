@@ -2,6 +2,7 @@ package br.com.edu.pos.controle.automatizacao.residencial.view;
 
 import java.awt.Button;
 import java.awt.CardLayout;
+import java.awt.Checkbox;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Font;
@@ -16,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Date;
 import java.util.List;
 
 import br.com.edu.pos.controle.automatizacao.residencial.controller.EquipamentoController;
@@ -23,8 +25,11 @@ import br.com.edu.pos.controle.automatizacao.residencial.controller.InicializarS
 import br.com.edu.pos.controle.automatizacao.residencial.controller.UsuarioController;
 import br.com.edu.pos.controle.automatizacao.residencial.dto.EquipamentoIotDTO;
 import br.com.edu.pos.controle.automatizacao.residencial.dto.UsuarioDTO;
+import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoAcesso;
 import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoEquipamentoIot;
 import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoUsuario;
+import br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao.EquipamentoIotDAO;
+import br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao.UsuarioDAO;
 
 public class ControleAutomatizacaoPrincipal extends Frame implements ActionListener, WindowListener {
 
@@ -47,7 +52,7 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 	UsuarioController usuario = new UsuarioController();
 	UsuarioDTO usuarioDTOConsulta;
 	EquipamentoIotDTO equipamentoIotDTOConsulta;
-
+	Integer controlePaineis = new Integer(1);
 	// Controles de Tela dos Equipamentos e demais atributos
 	TextField tfNomeIot;
 	TextField tfDescricaoIot;
@@ -57,12 +62,32 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 	Choice choiceEquipamentoIOT;
 	Panel painelConsultarEquipamentoIOT;
 	TextArea textAreaEquipamentoIOT;
+	Panel painelEquiptIOT;
 	Button
-	// Botoes do Cadastro de EquipamentoIOT
+	// Botoes do Cadastro de EquipamentoIOT e demais atributos
 	btEquipamentoIot, btIncluirEquipamentoIot, btExcluirEquipamentoIot, btAlterarEquipamentoIot,
 			btConsultarEquipamentoIot, btLimparEquipamentoIot;
 	EquipamentoController equipamento = new EquipamentoController();
 	EquipamentoIotDTO equipamentoIotDTO;
+	
+	//Botoes para Gerar acesso e demais atributos
+	TextField
+		tfInicioAcesso,
+		tfFimAcesso,
+		tfIdAcesso,
+		tfQtdeVezes;
+	Choice choiceTipoAcesso;
+	Checkbox chRepetido;
+	Button
+		btIniciar,
+		btFinalizar,
+		btConsultarAcesso;
+	TextArea textAreaAcesso;
+	
+	
+
+	
+
 
 	Button btAcesso, btAgenda;
 
@@ -72,14 +97,13 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 		setTitle("Cadastro de Automatizacao Residencial.");
 		setResizable(false);
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds((screenSize.width - 400) / 2, (screenSize.height - 500) / 2, 400, 565);
+		setBounds((screenSize.width - 450) / 2, (screenSize.height - 565) / 2, 450, 565);
 		setBackground(SystemColor.control);
 
 		Panel principal = new Panel(), atalhos = new Panel(new GridLayout(4, 1, 5, 4));
 		atalhos.add(btUsuario = new Button("Usuário"));
 		atalhos.add(btEquipamentoIot = new Button("EquipIOT"));
-		atalhos.add(btAcesso = new Button("Acesso"));
-		atalhos.add(btAgenda = new Button("Agenda"));
+		atalhos.add(btAcesso = new Button("Gerar Acesso"));
 		principal.add(atalhos);
 		add("East", principal);
 		// Criar Painels
@@ -120,11 +144,11 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 		btExcluirUsuario.addActionListener(this);
 		btAlterarUsuario.addActionListener(this);
 		btLimparUsuario.addActionListener(this);
-		cadastro.add(painelUsuario, "Principal");
+		cadastro.add(painelUsuario);
 		////////////////////////////////////////////
 
 		// Painel de Cadastro de EquiptIOT
-		Panel painelEquiptIOT = new Panel();
+		painelEquiptIOT = new Panel();
 		painelEquiptIOT.setBackground(Color.gray);
 		painelEquiptIOT.add(new Label("ID : "));
 		painelEquiptIOT.add(tfIdIot = new TextField());
@@ -153,12 +177,46 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 		btConsultarEquipamentoIot.addActionListener(this);
 		btExcluirEquipamentoIot.addActionListener(this);
 		btLimparEquipamentoIot.addActionListener(this);
-		cadastro.add(painelEquiptIOT, "Principal");
+		cadastro.add(painelEquiptIOT);
 		//////////////////////////////////////////////////
+		
+		//Painel para gerar acesso ao usuario
+		Panel painelAcesso = new Panel();
+		painelAcesso.setBackground(Color.gray);
+		painelAcesso.add(new Label("ID : "));
+		painelAcesso.add(tfIdAcesso = new TextField());
+		tfInicioAcesso = CriarPainelCampo(tfInicioAcesso,"Início",painelAcesso);
+		tfFimAcesso = CriarPainelCampo(tfFimAcesso,"Fim",painelAcesso);	
+		tfQtdeVezes = CriarPainelCampo(tfQtdeVezes,"Número de vezes",painelAcesso);		
+		Panel painel = new Panel(new GridLayout(2, 2));
+		painel.add(new Label("Tipo de Acesso", Label.LEFT));
+		choiceTipoAcesso = new Choice();
+		choiceTipoAcesso.add("--Selecione--               ");
+		painel.add(choiceTipoAcesso);
+		painelAcesso.add(painel);
+		painelAcesso.add(new Label("                                                "));		
+		Panel painel2 = new Panel(new GridLayout(2, 2));
+		painel2.add(chRepetido = new Checkbox("Repetir", true));
+		painelAcesso.add(painel2);
+		painelAcesso.add(new Label("                                                                           "));
+		painelAcesso.add(btIniciar = new Button("Inciar"));
+		painelAcesso.add(btFinalizar = new Button("Finalizar"));
+		painelAcesso.add(btConsultarAcesso = new Button("Consultar"));
+		btIniciar.addActionListener(this);
+		btFinalizar.addActionListener(this); 
+		btConsultarAcesso.addActionListener(this);
+		Panel painelConsultarAcesso = new Panel(new GridLayout(5, 5));
+		textAreaAcesso = new TextArea("", 10, 42);
+		textAreaAcesso.setFont(new Font("Courier", Font.PLAIN, 12));
+		painelConsultarAcesso.add(textAreaAcesso);
+		painelAcesso.add(painelConsultarAcesso);
+		cadastro.add(painelAcesso,"Acesso");
+		////////////////////////////////////////////////////
 
 		add("Center", cadastro);
 		btUsuario.addActionListener(this);
 		btEquipamentoIot.addActionListener(this);
+		btAcesso.addActionListener(this);
 		addWindowListener(this);
 
 	}
@@ -375,9 +433,7 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 
 		}
 
-		if (e.getSource() == btUsuario) {
-			cl.first(cadastro);
-		}
+		
 
 		if (e.getSource() == btIncluirEquipamentoIot) {
 			EquipamentoIotDTO equipt = new EquipamentoIotDTO();
@@ -390,6 +446,7 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 			tfDescricaoIot.setText("");
 			tfIpIot.setText("");
 			tfCodigoIot.setText("");
+			consultarEquipamentoIot();
 		}
 		
 		if(e.getSource() == btExcluirEquipamentoIot){
@@ -397,6 +454,7 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 			equipt.setId(tfIdIot.getText());
 			equipamento.excluir(equipt);
 			limparCamposEquipamento();
+			consultarEquipamentoIot();
 		}
 		
 		if(e.getSource() == btAlterarEquipamentoIot)
@@ -419,9 +477,22 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 			limparCamposEquipamento();
 		}
 		
+		//navegacao entre configuraçoes
+		if (e.getSource() == btUsuario) {
+			cl.first(cadastro);
+			controlePaineis = 1;
+		}
 		
 		if (e.getSource() == btEquipamentoIot) {
-			cl.next(cadastro);
+			if(controlePaineis == 1)
+				cl.next(cadastro);
+			else if(controlePaineis == 3)
+				cl.previous(cadastro);
+			controlePaineis = 2;
+		}
+		if(e.getSource()  == btAcesso){
+			cl.last(cadastro);
+			controlePaineis = 3;
 		}
 
 	}

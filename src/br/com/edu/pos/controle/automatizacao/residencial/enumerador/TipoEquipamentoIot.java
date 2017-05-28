@@ -2,7 +2,7 @@ package br.com.edu.pos.controle.automatizacao.residencial.enumerador;
 
 public enum TipoEquipamentoIot {
 	
-	ACESSO(1,"Acesso",true),LEITURA(2,"Leitura",true),AUTOMATIZADOR(3,"Controle",true),NENHUM(3,"Nenhum",true);
+	ACESSO(1,"Acesso",true),LEITURA(2,"Leitura",true),AUTOMATIZADOR(3,"Controle",true),NENHUM(4,"Nenhum",true);
 	
 	private final Integer valor;
 	private final String descricao;
