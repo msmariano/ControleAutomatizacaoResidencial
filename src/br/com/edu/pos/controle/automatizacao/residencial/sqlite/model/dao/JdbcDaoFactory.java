@@ -157,8 +157,15 @@ public abstract class JdbcDaoFactory extends DaoFactory {
 		
 		for (String expressao : par3) {
 			String chave[] = expressao.split("=");
-			campo.add(chave[0]);
-			valor.add(chave[1]);
+			if(chave!=null && chave.length >0)
+				campo.add(chave[0]);
+			else
+				campo.add("");
+			
+			if(chave!=null && chave.length >1)
+				valor.add(chave[1]);
+			else
+				valor.add("");
 		}
 		
 		if((campo.size() > 0 && valor.size() >0 ) && (campo.size() == valor.size())){
@@ -198,7 +205,7 @@ public abstract class JdbcDaoFactory extends DaoFactory {
 		int i = 0;
 		if(campo.size() == valor.size()){
 			for (String string : campo) {
-				if(string.equals("id")){
+				if(string.trim().equals("id")){
 					id = valor.get(i);
 					break;
 				}

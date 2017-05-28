@@ -13,7 +13,7 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 	private String email;
 	private String telefone;
 	private String id;
-	List<UsuarioDAO> listaUsuarios = new ArrayList<>();;
+	List<UsuarioDAO> listaUsuarios = new ArrayList<>();
 	TipoUsuario tipoUsuario;
 	
 	public List<UsuarioDAO> getListaUsuarios() {
@@ -177,27 +177,34 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 				this.setEmail(lista.get(3));
 				this.setTelefone(lista.get(4));
 				TipoUsuario tipoUsuario;
-				switch(Integer.parseInt(lista.get(5))){
-				case 1:
-					tipoUsuario = TipoUsuario.VISITANTE;
-					break;
-				case 2:
-					tipoUsuario = TipoUsuario.EQUIPAMENTOIOT;
-					break;
-				case 3:
-					tipoUsuario = TipoUsuario.ACESSO;
-					break;
-				case 4:	
-					tipoUsuario = TipoUsuario.MORADOR;
-					break;
-				default:
+				try
+				{
+					switch(Integer.parseInt(lista.get(5))){
+					case 1:
+						tipoUsuario = TipoUsuario.VISITANTE;
+						break;
+					case 2:
+						tipoUsuario = TipoUsuario.EQUIPAMENTOIOT;
+						break;
+					case 3:
+						tipoUsuario = TipoUsuario.ACESSO;
+						break;
+					case 4:	
+						tipoUsuario = TipoUsuario.MORADOR;
+						break;
+					default:
+						tipoUsuario = TipoUsuario.NENHUM;
+						break;
+					}
+				}
+				catch(Exception e){
 					tipoUsuario = TipoUsuario.NENHUM;
-					break;
 				}
 				
 				this.setTipoUsuario(tipoUsuario);
 				this.setId(lista.get(6));
 			}
+			listaUsuarios.add(this);
 		}
 		else{
 			
@@ -210,22 +217,29 @@ public class UsuarioDAO extends SqlGenerico implements Sql {
 				usuario.setEmail(lista.get(3));
 				usuario.setTelefone(lista.get(4));
 				TipoUsuario tipoUsuario;
-				switch(Integer.parseInt(lista.get(5))){
-				case 1:
-					tipoUsuario = TipoUsuario.VISITANTE;
-					break;
-				case 2:
-					tipoUsuario = TipoUsuario.EQUIPAMENTOIOT;
-					break;
-				case 3:
-					tipoUsuario = TipoUsuario.ACESSO;
-					break;
-				case 4:	
-					tipoUsuario = TipoUsuario.MORADOR;
-					break;
-				default:
+				try
+				{
+					
+					switch(Integer.parseInt(lista.get(5))){
+					case 1:
+						tipoUsuario = TipoUsuario.VISITANTE;
+						break;
+					case 2:
+						tipoUsuario = TipoUsuario.EQUIPAMENTOIOT;
+						break;
+					case 3:
+						tipoUsuario = TipoUsuario.ACESSO;
+						break;
+					case 4:	
+						tipoUsuario = TipoUsuario.MORADOR;
+						break;
+					default:
+						tipoUsuario = TipoUsuario.NENHUM;
+						break;
+					}
+				}
+				catch(Exception e){
 					tipoUsuario = TipoUsuario.NENHUM;
-					break;
 				}
 				
 				usuario.setTipoUsuario(tipoUsuario);

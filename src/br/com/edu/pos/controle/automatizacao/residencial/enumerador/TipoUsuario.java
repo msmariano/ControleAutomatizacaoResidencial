@@ -1,7 +1,7 @@
 package br.com.edu.pos.controle.automatizacao.residencial.enumerador;
 
 public enum TipoUsuario  {
-	VISITANTE(1,"Visitante",true),EQUIPAMENTOIOT(2,"EquipamentoIot",true),ACESSO(3,"Acesso",true),MORADOR(4,"Morador",true),NENHUM(-1,"Morador",true) ;
+	VISITANTE(1,"Visitante",true),EQUIPAMENTOIOT(2,"EquipamentoIot",true),ACESSO(3,"Acesso",true),MORADOR(4,"Morador",true),NENHUM(-1,"Nenhum",true) ;
 	
 	private final Integer valor;
 	private final String descricao;
@@ -31,12 +31,36 @@ public enum TipoUsuario  {
         }
         return "";
     }
+	
+	public static Integer getValor(String descricao) {
+    	TipoUsuario[] elementos = values();
+        for (TipoUsuario enumTipoUsuario : elementos) {
+            if (enumTipoUsuario.getDescricao().toLowerCase().equals(descricao.toLowerCase())) {
+                return enumTipoUsuario.getValor();
+            }
+        }
+        return null;
 
-    public static Integer getValor(String descricao) {
+    }
+
+    public static TipoUsuario getTipo(String descricao) {
     	TipoUsuario[] elementos = values();
         for (TipoUsuario enumTipoUsuario : elementos) {
             if (enumTipoUsuario.getDescricao().equals(descricao)) {
-                return enumTipoUsuario.getValor();
+            	
+            	switch (enumTipoUsuario.getValor())
+            	{
+            	case 1:
+            		return TipoUsuario.VISITANTE;
+            	case 2:
+            		return TipoUsuario.EQUIPAMENTOIOT;
+            	case 3:
+            		return TipoUsuario.ACESSO;
+            	case 4:
+            		return TipoUsuario.MORADOR;
+            	default:
+            		return TipoUsuario.NENHUM;
+            	}
             }
         }
         return null;

@@ -13,6 +13,7 @@ public class EquipamentoIotDTO {
 	private String descricao;
 	private String ip;
 	private String codigo;
+	private String id;
 	TipoEquipamentoIot tipoEquipamento;
 	
 	List<EquipamentoIotDAO> listaEquipamentos = new ArrayList<>();
@@ -52,6 +53,12 @@ public class EquipamentoIotDTO {
 	}
 	public void setTipoEquipamento(TipoEquipamentoIot tipoEquipamento) {
 		this.tipoEquipamento = tipoEquipamento;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 
 }

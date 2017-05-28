@@ -2,7 +2,7 @@ package br.com.edu.pos.controle.automatizacao.residencial.enumerador;
 
 public enum TipoEquipamentoIot {
 	
-	ACESSO(1,"Acesso",true),LEITURA(2,"Leitura",true),AUTOMATIZADOR(3,"Controle",true);
+	ACESSO(1,"Acesso",true),LEITURA(2,"Leitura",true),AUTOMATIZADOR(3,"Controle",true),NENHUM(3,"Nenhum",true);
 	
 	private final Integer valor;
 	private final String descricao;
@@ -41,6 +41,29 @@ public enum TipoEquipamentoIot {
         return null;
 
     }
+    
+    public static TipoEquipamentoIot getTipo(String descricao) {
+    	TipoEquipamentoIot[] elementos = values();
+        for (TipoEquipamentoIot enumTipoUsuario : elementos) {
+            if (enumTipoUsuario.getDescricao().equals(descricao)) {
+            	
+            	switch (enumTipoUsuario.getValor())
+            	{
+            	case 1:
+            		return TipoEquipamentoIot.ACESSO;
+            	case 2:
+            		return TipoEquipamentoIot.LEITURA;
+            	case 3:
+            		return TipoEquipamentoIot.AUTOMATIZADOR;
+            	default:
+            		return TipoEquipamentoIot.NENHUM;
+            	}
+            }
+        }
+        return null;
+
+    }
+    
 	public Boolean getMostrar() {
 		return mostrar;
 	}

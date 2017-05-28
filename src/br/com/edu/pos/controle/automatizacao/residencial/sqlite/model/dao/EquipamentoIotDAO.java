@@ -1,31 +1,45 @@
 package br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao;
 
-import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoEquipamentoIot;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class EquipamentoIotDAO  extends SqlGenerico implements Sql{
+import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoEquipamentoIot;
+import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoUsuario;
+
+public class EquipamentoIotDAO extends SqlGenerico implements Sql {
 	private String nome;
 	private String descricao;
 	private String ip;
 	private String codigo;
 	private String id;
 	TipoEquipamentoIot tipoEquipamento;
-	
-	public EquipamentoIotDAO(){
+	List<EquipamentoIotDAO> listaEquipamentoIot = new ArrayList<>();
+
+	public List<EquipamentoIotDAO> getListaEquipamentoIot() {
+		return listaEquipamentoIot;
+	}
+
+	public void setListaEquipamentoIot(List<EquipamentoIotDAO> listaEquipamentoIot) {
+		this.listaEquipamentoIot = listaEquipamentoIot;
+	}
+
+	public EquipamentoIotDAO() {
 		inclusao.setObj(this);
 		exclusao.setObj(this);
 		alteracao.setObj(this);
 		consulta.setObj(this);
-		
+
 	}
-	
+
 	@Override
 	public String toString() {
-		
-		if(tipoEquipamento == null){
+
+		if (tipoEquipamento == null) {
 			return "EquipamentoIot [nome=" + nome + ", descricao=" + descricao + ", ip=" + ip + ", codigo=" + codigo
 					+ ", id=" + id + ", tipoEquipamento=null ]";
 		}
-		
+
 		return "EquipamentoIot [nome=" + nome + ", descricao=" + descricao + ", ip=" + ip + ", codigo=" + codigo
 				+ ", id=" + id + ", tipoEquipamento=" + tipoEquipamento + "]";
 	}
@@ -85,59 +99,144 @@ public class EquipamentoIotDAO  extends SqlGenerico implements Sql{
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public String getDescricao() {
 		return descricao;
 	}
+
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
 	public String getIp() {
 		return ip;
 	}
+
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
+
 	public String getCodigo() {
 		return codigo;
 	}
+
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
+
 	public TipoEquipamentoIot getTipoEquipamento() {
 		return tipoEquipamento;
 	}
+
 	public void setTipoEquipamento(TipoEquipamentoIot tipoEquipamento) {
 		this.tipoEquipamento = tipoEquipamento;
 	}
+
 	public String getId() {
 		return id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	@Override
 	public void salvar() {
 		inclusao.inserir();
-		
+
 	}
+
 	@Override
 	public void deletar() {
 		exclusao.excluir();
-		
+
 	}
+
 	@Override
 	public void consultar() {
-		// TODO Auto-generated method stub
-		
+
+		consulta.consultar();
+		Collection<Object> res = consulta.getResultadoLinha();
+		if (res.size() == 1) {
+			for (Object object : res) {
+				List<String> lista = (List<String>) object;
+				this.setNome(lista.get(0));
+				this.setDescricao(lista.get(1));
+				this.setIp(lista.get(2));
+				this.setCodigo(lista.get(3));
+				this.setId(lista.get(4));
+				TipoEquipamentoIot tipoEquipamentoIot;
+				try {
+					switch (Integer.parseInt(lista.get(5))) {
+					case 1:
+						tipoEquipamentoIot = TipoEquipamentoIot.ACESSO;
+						break;
+					case 2:
+						tipoEquipamentoIot = TipoEquipamentoIot.LEITURA;
+						break;
+					case 3:
+						tipoEquipamentoIot = TipoEquipamentoIot.AUTOMATIZADOR;
+						break;
+
+					default:
+						tipoEquipamentoIot = TipoEquipamentoIot.NENHUM;
+						break;
+					}
+				} catch (Exception e) {
+					tipoEquipamentoIot = TipoEquipamentoIot.NENHUM;
+				}
+
+				this.setTipoEquipamento(tipoEquipamentoIot);
+
+			}
+			listaEquipamentoIot.add(this);
+		} else {
+
+			for (Object object : res) {
+				EquipamentoIotDAO equipamentoIotDAO = new EquipamentoIotDAO();
+				List<String> lista = (List<String>) object;
+				equipamentoIotDAO.setNome(lista.get(0));
+				equipamentoIotDAO.setDescricao(lista.get(1));
+				equipamentoIotDAO.setIp(lista.get(2));
+				equipamentoIotDAO.setCodigo(lista.get(3));
+				equipamentoIotDAO.setId(lista.get(4));
+				TipoEquipamentoIot tipoEquipamentoIot;
+				try {
+					switch (Integer.parseInt(lista.get(5))) {
+					case 1:
+						tipoEquipamentoIot = TipoEquipamentoIot.ACESSO;
+						break;
+					case 2:
+						tipoEquipamentoIot = TipoEquipamentoIot.LEITURA;
+						break;
+					case 3:
+						tipoEquipamentoIot = TipoEquipamentoIot.AUTOMATIZADOR;
+						break;
+
+					default:
+						tipoEquipamentoIot = TipoEquipamentoIot.NENHUM;
+						break;
+					}
+				} catch (Exception e) {
+					tipoEquipamentoIot = TipoEquipamentoIot.NENHUM;
+				}
+
+				equipamentoIotDAO.setTipoEquipamento(tipoEquipamentoIot);
+				listaEquipamentoIot.add(equipamentoIotDAO);
+			}
+
+		}
+
 	}
+
 	@Override
 	public void modificar() {
 		alteracao.alterar();
-		
+
 	}
-	
 
 }
