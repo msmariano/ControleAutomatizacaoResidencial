@@ -1,5 +1,5 @@
 package br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao;
-
+//Marcelo dos Santos Mariano
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

@@ -1,5 +1,5 @@
 package br.com.edu.pos.controle.automatizacao.residencial.enumerador;
-
+//Marcelo dos Santos Mariano
 public enum TipoAcesso {
 	SOCIAL(1,"Social",true),PERMANENTE(2,"Permanente",true),SERVICO(3,"Servico",true),NENHUM(4,"Nenhum",true);
 	

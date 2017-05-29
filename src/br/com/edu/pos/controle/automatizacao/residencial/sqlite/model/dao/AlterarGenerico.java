@@ -1,5 +1,5 @@
 package br.com.edu.pos.controle.automatizacao.residencial.sqlite.model.dao;
-
+//Marcelo dos Santos Mariano
 public class AlterarGenerico extends JdbcDaoFactory {
 	
 	public String alterar(){

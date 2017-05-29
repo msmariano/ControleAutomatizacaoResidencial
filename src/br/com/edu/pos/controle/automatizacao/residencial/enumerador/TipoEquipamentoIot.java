@@ -1,5 +1,5 @@
 package br.com.edu.pos.controle.automatizacao.residencial.enumerador;
-
+//Marcelo dos Santos Mariano
 public enum TipoEquipamentoIot {
 	
 	ACESSO(1,"Acesso",true),LEITURA(2,"Leitura",true),AUTOMATIZADOR(3,"Controle",true),NENHUM(4,"Nenhum",true);

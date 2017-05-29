@@ -1,5 +1,5 @@
 package br.com.edu.pos.controle.automatizacao.residencial.dto;
-
+//Marcelo dos Santos Mariano
 import java.util.ArrayList;
 import java.util.List;
 
