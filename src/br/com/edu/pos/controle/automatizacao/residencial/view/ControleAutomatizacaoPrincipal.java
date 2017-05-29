@@ -17,12 +17,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import br.com.edu.pos.controle.automatizacao.residencial.controller.AcessoController;
 import br.com.edu.pos.controle.automatizacao.residencial.controller.EquipamentoController;
 import br.com.edu.pos.controle.automatizacao.residencial.controller.InicializarSistema;
 import br.com.edu.pos.controle.automatizacao.residencial.controller.UsuarioController;
+import br.com.edu.pos.controle.automatizacao.residencial.dto.AcessoDTO;
 import br.com.edu.pos.controle.automatizacao.residencial.dto.EquipamentoIotDTO;
 import br.com.edu.pos.controle.automatizacao.residencial.dto.UsuarioDTO;
 import br.com.edu.pos.controle.automatizacao.residencial.enumerador.TipoAcesso;
@@ -71,6 +75,8 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 	EquipamentoIotDTO equipamentoIotDTO;
 	
 	//Botoes para Gerar acesso e demais atributos
+	AcessoController acessoController = new AcessoController();
+	AcessoDTO acessoDTOConsulta;
 	TextField
 		tfInicioAcesso,
 		tfFimAcesso,
@@ -81,11 +87,13 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 	Button
 		btIniciar,
 		btFinalizar,
-		btConsultarAcesso;
+		btConsultarAcesso,
+		btLimparAcesso;
 	TextArea textAreaAcesso;
 	
 	
-
+	Choice choiceUsuarios,
+		   choiceEquipamentos;
 	
 
 
@@ -94,7 +102,13 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 	@SuppressWarnings("deprecation")
 	public ControleAutomatizacaoPrincipal() {
 
-		setTitle("Cadastro de Automatizacao Residencial.");
+		
+		SimpleDateFormat sd = new SimpleDateFormat("MMM");
+		
+		//setTitle("Cadastro de Automatizacao Residencial.");
+		
+		setTitle(sd.format(new Date()));
+		
 		setResizable(false);
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		setBounds((screenSize.width - 450) / 2, (screenSize.height - 565) / 2, 450, 565);
@@ -193,18 +207,33 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 		choiceTipoAcesso = new Choice();
 		choiceTipoAcesso.add("--Selecione--               ");
 		painel.add(choiceTipoAcesso);
+		choiceTipoAcesso.addItem(TipoAcesso.NENHUM.getDescricao());
+		choiceTipoAcesso.addItem(TipoAcesso.PERMANENTE.getDescricao());
+		choiceTipoAcesso.addItem(TipoAcesso.SERVICO.getDescricao());
+		choiceTipoAcesso.addItem(TipoAcesso.SOCIAL.getDescricao());
 		painelAcesso.add(painel);
 		painelAcesso.add(new Label("                                                "));		
 		Panel painel2 = new Panel(new GridLayout(2, 2));
 		painel2.add(chRepetido = new Checkbox("Repetir", true));
 		painelAcesso.add(painel2);
 		painelAcesso.add(new Label("                                                                           "));
+		Panel painel3 = new Panel(new GridLayout(2, 2));
+		painel3.add(choiceUsuarios = new Choice());
+		choiceUsuarios.addItem("--Selecione--                ");
+		painelAcesso.add(painel3);		
+		Panel painel4 = new Panel(new GridLayout(2, 2));
+		painel4.add(choiceEquipamentos = new Choice());
+		choiceEquipamentos.addItem("--Selecione--                ");
+		painelAcesso.add(painel4);		
 		painelAcesso.add(btIniciar = new Button("Inciar"));
 		painelAcesso.add(btFinalizar = new Button("Finalizar"));
 		painelAcesso.add(btConsultarAcesso = new Button("Consultar"));
+		painelAcesso.add(btLimparAcesso = new Button("Limpar"));
+		btFinalizar.disable();
 		btIniciar.addActionListener(this);
 		btFinalizar.addActionListener(this); 
 		btConsultarAcesso.addActionListener(this);
+		btLimparAcesso.addActionListener(this);
 		Panel painelConsultarAcesso = new Panel(new GridLayout(5, 5));
 		textAreaAcesso = new TextArea("", 10, 42);
 		textAreaAcesso.setFont(new Font("Courier", Font.PLAIN, 12));
@@ -268,6 +297,7 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 			equipamentoIotDTOConsulta = equipamentosConsulta.get(0);
 			tfNomeIot.setText(equipamentoIotDTOConsulta.getNome());
 			tfDescricaoIot.setText(equipamentoIotDTOConsulta.getDescricao());
+			tfIpIot.setText(equipamentoIotDTOConsulta.getIp());
 			tfIdIot.setText(equipamentoIotDTOConsulta.getIp());
 			tfCodigoIot.setText(equipamentoIotDTOConsulta.getCodigo());
 			choiceEquipamentoIOT.select(equipamentoIotDTOConsulta.getTipoEquipamento().getDescricao());
@@ -286,6 +316,88 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 		
 		
 		
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void consultarAcesso() throws ParseException{
+		AcessoDTO dados = new AcessoDTO();
+		SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");			
+		try {
+			if(!tfInicioAcesso.getText().equals(""))
+				dados.setInicioAcesso(sd.parse(tfInicioAcesso.getText()));
+			if(!tfFimAcesso.getText().equals(""))
+				dados.setFimAcesso(sd.parse(tfFimAcesso.getText()));
+			if(!tfQtdeVezes.getText().equals(""))
+				dados.setQtdeVezes(Integer.parseInt(tfQtdeVezes.getText()));
+			dados.setRepetido(chRepetido.getState());
+			dados.setTipoAcesso(TipoAcesso.getTipo(choiceTipoAcesso.getSelectedItem()));
+			
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		List<AcessoDTO> acessosConsulta =  acessoController.consultar(dados);
+		String cons = "";
+		for (AcessoDTO acessoDTO : acessosConsulta) {
+			
+			String dataInicio = sd.format(acessoDTO.getInicioAcesso());
+			String dataFim = sd.format(acessoDTO.getFimAcesso());
+			String repetir = "Não repetir";
+			if(acessoDTO.getRepetido())
+				repetir = "Repetir";
+			
+			cons = cons + String.format("|%-5.5s|%-10.10s|%-10.10s|%-5.5s|%-11.11s|%-20.20s|",
+					acessoDTO.getId(), dataInicio, dataFim, acessoDTO.getQtdeVezes(), repetir,
+					acessoDTO.getTipoAcesso()) + "\r\n";
+			cons = cons + "--------------------------------------------------------------------------" + "\r\n";
+		}
+		textAreaAcesso.setText(cons);
+		if(acessosConsulta.size() == 1)
+		{
+			
+			
+			
+			acessoDTOConsulta = acessosConsulta.get(0);
+			
+			int i = 0;
+			for(i = 0 ; i < choiceUsuarios.countItems();i++){
+				String item = choiceUsuarios.getItem(i);
+				String [] sp = item.split("-");
+				if(sp[0].trim().equals( acessoDTOConsulta.getUsuarioAcessoId().getId() )){
+					break;
+				}
+				
+			}
+			choiceUsuarios.select( choiceUsuarios.getItem(i));
+			
+			
+			for(i = 0 ; i < choiceEquipamentos.countItems();i++){
+				String item = choiceEquipamentos.getItem(i);
+				String [] sp = item.split("-");
+				if(sp[0].trim().equals( acessoDTOConsulta.getEquipamentoAcessoId().getId() )){
+					break;
+				}
+				
+			}
+			choiceEquipamentos.select( choiceEquipamentos.getItem(i));
+					
+					
+			tfInicioAcesso.setText(sd.format(acessoDTOConsulta.getInicioAcesso()));
+			tfFimAcesso.setText(sd.format(acessoDTOConsulta.getFimAcesso()));
+			tfQtdeVezes.setText(String.valueOf(acessoDTOConsulta.getQtdeVezes()));
+			choiceTipoAcesso.select(acessoDTOConsulta.getTipoAcesso().getDescricao());			
+			chRepetido.setState(acessoDTOConsulta.getRepetido());
+			tfIdAcesso.setText(acessoDTOConsulta.getId());
+			btIniciar.disable();
+			btFinalizar.enable();
+			
+		}
+		else
+		{
+			btIniciar.enable();
+			btFinalizar.disable();
+			
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -477,6 +589,113 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 			limparCamposEquipamento();
 		}
 		
+		//Acesso
+		if(e.getSource() == btIniciar)
+		{
+			
+			String opcaoUsuario = choiceUsuarios.getSelectedItem();
+			String opcaoEquipamento = choiceEquipamentos.getSelectedItem();
+			String idUsuario = "";
+			String idEquipamento="";
+			
+			if( !opcaoUsuario.trim().toLowerCase().equals("--selecione--") ){
+				
+				String[] sp = opcaoUsuario.split("-");
+				idUsuario = sp[0];
+			}
+			
+			if( !opcaoEquipamento.trim().toLowerCase().equals("--selecione--") ){
+				String[] sp = opcaoEquipamento.split("-");
+				idEquipamento = sp[0];
+			}
+			
+			AcessoDTO dados = new AcessoDTO();
+			SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");			
+			try {
+				dados.setInicioAcesso(sd.parse(tfInicioAcesso.getText()));
+				dados.setFimAcesso(sd.parse(tfFimAcesso.getText()));
+				dados.setQtdeVezes(Integer.parseInt(tfQtdeVezes.getText()));
+				dados.setRepetido(chRepetido.getState());
+				dados.setTipoAcesso(TipoAcesso.getTipo(choiceTipoAcesso.getSelectedItem()));
+				dados.getUsuarioAcessoId().setId(idUsuario);
+				dados.getEquipamentoAcessoId().setId(idEquipamento);
+				
+				acessoController.incluir(dados);
+				
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			
+			try {
+				consultarAcesso();
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			btIniciar.disable();
+			btFinalizar.enable();
+		}
+		
+		if(e.getSource() == btFinalizar)
+		{
+			AcessoDTO dados = new AcessoDTO();
+			SimpleDateFormat sd = new SimpleDateFormat("dd/MM/yyyy");			
+			try {
+				dados.setInicioAcesso(sd.parse(tfInicioAcesso.getText()));
+				dados.setFimAcesso(sd.parse(tfFimAcesso.getText()));
+				dados.setQtdeVezes(Integer.parseInt(tfQtdeVezes.getText()));
+				dados.setRepetido(chRepetido.getState());
+				dados.setTipoAcesso(TipoAcesso.getTipo(choiceTipoAcesso.getSelectedItem()));
+				dados.setId(tfIdAcesso.getText());
+				
+				try {
+					consultarAcesso();
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				btIniciar.enable();
+				btFinalizar.disable();
+				
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			acessoController.excluir(dados);
+			
+		}
+		if(e.getSource() == btLimparAcesso)
+		{
+			tfIdAcesso.setText(" ");
+			tfIdAcesso.setText("");
+			tfInicioAcesso.setText(" ");
+			tfInicioAcesso.setText("");
+			tfFimAcesso.setText(" ");
+			tfFimAcesso.setText("");
+			tfQtdeVezes.setText(" ");
+			tfQtdeVezes.setText("");
+			choiceTipoAcesso.select(0);
+			choiceUsuarios.select(0);
+			choiceEquipamentos.select(0);
+			btIniciar.enable();
+			btFinalizar.disable();
+			textAreaAcesso.setText("");
+			chRepetido.setState(true);
+			
+			
+		}
+		if(e.getSource() == btConsultarAcesso)
+		{
+			try {
+				consultarAcesso();
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
 		//navegacao entre configuraçoes
 		if (e.getSource() == btUsuario) {
 			cl.first(cadastro);
@@ -493,6 +712,34 @@ public class ControleAutomatizacaoPrincipal extends Frame implements ActionListe
 		if(e.getSource()  == btAcesso){
 			cl.last(cadastro);
 			controlePaineis = 3;
+			
+			
+			
+						
+			
+			
+			choiceEquipamentos.removeAll();
+			choiceUsuarios.removeAll();
+			choiceEquipamentos.addItem("--Selecione--                ");
+			choiceUsuarios.addItem("--Selecione--                ");
+			
+			
+			
+			
+			List<EquipamentoIotDTO> equipamentosConsulta = equipamento.consultar(new EquipamentoIotDTO());			
+			for (EquipamentoIotDTO equipamentoIotDTO : equipamentosConsulta) {
+				
+				String res = String.format("%-20.20s",equipamentoIotDTO.getId()+"-"+equipamentoIotDTO.getNome());
+				choiceEquipamentos.addItem(res);
+			}
+			
+			List<UsuarioDTO> usuariosConsulta = usuario.consultar(new UsuarioDTO());
+			for (UsuarioDTO usuarioDTO : usuariosConsulta) {
+				
+				String res = String.format("%-20.20s",usuarioDTO.getId()+'-'+usuarioDTO.getNome());
+				choiceUsuarios.addItem(res);
+			}
+			
 		}
 
 	}

@@ -29,7 +29,7 @@ public class Tabelas extends JdbcDaoFactory {
 					executa("CREATE UNIQUE INDEX ideqtoiot ON EquipamentoIOT(id ASC)");
 				}
 				else if(tabela.equals("Acesso")){
-					executa("CREATE TABLE Acesso(inicioacesso TEXT,fimacesso TEXT,repetido TEXT,qtdevezes NUMERIC,tipoacesso NUMERIC,equipamentoAcesso TEXT,id INTEGER PRIMARY KEY)");
+					executa("CREATE TABLE Acesso(inicioacesso TEXT,fimacesso TEXT,repetido TEXT,qtdevezes NUMERIC,tipoacesso NUMERIC,equipamentoAcessoId TEXT,id INTEGER PRIMARY KEY,usuarioAcessoId)");
 					executa("CREATE UNIQUE INDEX idacesso ON Acesso(id ASC)");
 				}
 			}

@@ -1,7 +1,7 @@
 package br.com.edu.pos.controle.automatizacao.residencial.enumerador;
 
 public enum TipoAcesso {
-	SOCIAL(1,"Temporario",true),PERMANENTE(2,"Permanente",true),SERVICO(3,"Servico",true);
+	SOCIAL(1,"Social",true),PERMANENTE(2,"Permanente",true),SERVICO(3,"Servico",true),NENHUM(4,"Nenhum",true);
 	
 	private final Integer valor;
 	private final String descricao;
@@ -41,6 +41,30 @@ public enum TipoAcesso {
         return null;
 
     }
+    
+    public static TipoAcesso getTipo(String descricao) {
+    	TipoAcesso[] elementos = values();
+        for (TipoAcesso enumTipoUsuario : elementos) {
+            if (enumTipoUsuario.getDescricao().equals(descricao)) {
+            	
+            	switch (enumTipoUsuario.getValor())
+            	{
+            	case 1:
+            		return TipoAcesso.SOCIAL;
+            	case 2:
+            		return TipoAcesso.PERMANENTE;
+            	case 3:
+            		return TipoAcesso.SERVICO;
+            	default:
+            		return TipoAcesso.NENHUM;
+            	}
+            }
+        }
+        return null;
+
+    }
+    
+    
 	public Boolean getMostrar() {
 		return mostrar;
 	}
